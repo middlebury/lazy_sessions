@@ -61,16 +61,16 @@ if session_start() has been called for that script:
 	
 	// other application code.
 	
-	// Manually save the session
+	// If session_write_close() is not called before flushing, then the Set-Cookie
+	// header will be sent before our custom session handler has a chance to determine
+	// if a session is even needed.
 	session_write_close();
 	
-	// Execute the code that calls flush() and forces the headers to be sent.
-	$handle = fopen("http://www.example.com/", "rb");
-	while (!feof($handle)) {
-		print fread($handle, 8192);
-		flush();
-	}
-	fclose($handle);
+	
+	print "Hello";
+	flush();
+	print " World.";
+	flush();
 	
 	?>
 
