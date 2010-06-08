@@ -159,9 +159,3 @@ function lazysess_remove_session_cookie_header () {
  *********************************************************/
 
 session_set_save_handler('lazysess_open', 'lazysess_close', 'lazysess_read', 'lazysess_write', 'lazysess_destroy', 'lazysess_gc');
-
-/*********************************************************
- * Start the Session. Unless data gets saved to the session
- * no session will actually be saved.
- *********************************************************/
-session_start();
