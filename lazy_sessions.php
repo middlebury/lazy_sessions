@@ -151,7 +151,24 @@ function lazysess_remove_session_cookie_header () {
 	// Note: this implementation will blow away all Set-Cookie headers, not just
 	// those for the session cookie. If your app uses other cookies, reimplement
 	// this function.
-	header('Set-Cookie:', true);
+	if (version_compare(PHP_VERSION, '5.3.0') === 1) {
+		header_remove('Set-Cookie');
+	} else {
+		// PHP < 5.3 only allows sending empty headers, not fully removing them.
+		// These empty Set-Cookie headers can prevent proxies from caching the response.
+		//
+		// If using PHP < 5.3.0 and using Varnish for caching, add the following
+		// to the vcl_fetch section of your Varnish default.vcl before the line that
+		// passes if Set-Cookie headers are present:
+		//
+		// 		# If using PHP < 5.3 there is no way to fully delete headers, so empty
+		//		# Set-Cookie headers may be in the response. Ignore these empty headers.
+		//		if (beresp.http.Set-Cookie ~ "^\s*$") {
+		//			unset beresp.http.Set-Cookie;
+		//		}
+		//
+		header('Set-Cookie:', true);
+	}
 }
 
 /*********************************************************

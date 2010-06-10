@@ -74,6 +74,22 @@ if session_start() has been called for that script:
 	
 	?>
 
+=====================================
+ Reverse-Proxy Configuration (Varnish)
+=====================================
+The vcl_recv and vcl_hash sections of the Varnish configuration can come directly 
+from the Pressflow wiki:
+	https://wiki.fourkitchens.com/display/PF/Configure+Varnish+for+Pressflow?focusedCommentId=15335604
+
+If using PHP < 5.3.0 and using Varnish for caching, add the following to the 
+vcl_fetch section of your Varnish default.vcl before the line that passes 
+if Set-Cookie headers are present:
+
+	# If using PHP < 5.3 there is no way to fully delete headers, so empty
+	# Set-Cookie headers may be in the response. Ignore these empty headers.
+	if (beresp.http.Set-Cookie ~ "^\s*$") {
+		unset beresp.http.Set-Cookie;
+	}
 
 
 =====================================
