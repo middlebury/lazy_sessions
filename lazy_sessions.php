@@ -63,7 +63,12 @@ function lazysess_read($id)
 	global $sess_save_path;
 	
 	$sess_file = "$sess_save_path/sess_$id";
-	return (string) @file_get_contents($sess_file);
+	$return = (string) @file_get_contents($sess_file);
+	if ($return === FALSE) {
+		return FALSE;
+	} else {
+		return $return;
+	}
 }
 
 function lazysess_write($id, $sess_data)
