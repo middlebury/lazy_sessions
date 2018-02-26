@@ -92,9 +92,9 @@ function lazysess_write($id, $sess_data)
 	if ($fp = @fopen($sess_file, "w")) {
 		$return = fwrite($fp, $sess_data);
 		fclose($fp);
-		return $return;
+		return TRUE;
 	} else {
-		return(false);
+		return FALSE;
 	}
 
 }
